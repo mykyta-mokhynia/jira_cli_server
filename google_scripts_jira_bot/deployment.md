@@ -1,1 +1,0 @@
-WEBAPP_URL=https://script.google.com/a/macros/jarvisheart.com/s/AKfycbyENMNPopCPsSyE9IttKz2BrgZX8ftkpAhxV5Ic6REiQAcLwgASJUZcSU_WfBcioQqi/exec

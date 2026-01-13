@@ -172,6 +172,19 @@ export const addUserToGroup = async (accountId: string, groupName: string) => {
     }
 };
 
+export const removeUserFromGroup = async (accountId: string, groupName: string) => {
+    try {
+        const result = await jira.groups.removeUserFromGroup({
+            groupname: groupName,
+            accountId: accountId
+        });
+        return result;
+    } catch (error) {
+        console.error(`Error removing user ${accountId} from group ${groupName}:`, error);
+        throw error;
+    }
+};
+
 export const addGroupToProjectRole = async (projectKeyOrId: string, roleId: number, groupName: string) => {
     try {
         // @ts-ignore: Method exists in V3 client but types might be mismatching or I am missing exact signature

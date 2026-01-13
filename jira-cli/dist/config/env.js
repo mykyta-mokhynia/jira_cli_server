@@ -15,15 +15,24 @@ dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../../.env
 // Let's stick to the user's existing pattern but make it robust.
 const envPath = path_1.default.resolve(process.cwd(), '../.env');
 dotenv_1.default.config({ path: envPath });
+// Support legacy JIRA_AUTH (email:token)
+let jiraEmail = process.env.JIRA_EMAIL || '';
+let jiraToken = process.env.JIRA_API_TOKEN || '';
+const legacyAuth = process.env.JIRA_AUTH;
+if ((!jiraEmail || !jiraToken) && legacyAuth && legacyAuth.includes(':')) {
+    const [email, token] = legacyAuth.split(':');
+    jiraEmail = email.trim();
+    jiraToken = token.trim();
+}
 exports.config = {
     PORT: process.env.PORT || 3000,
     WEBAPP_URL: process.env.WEBAPP_URL, // Legacy support if needed
     JIRA: {
-        HOST: process.env.JIRA_HOST || '', // e.g., 'https://your-domain.atlassian.net'
-        EMAIL: process.env.JIRA_EMAIL || '',
-        API_TOKEN: process.env.JIRA_API_TOKEN || '',
+        HOST: process.env.JIRA_HOST || process.env.JIRA_BASE_URL || '',
+        EMAIL: jiraEmail,
+        API_TOKEN: jiraToken,
     }
 };
 if (!exports.config.JIRA.HOST || !exports.config.JIRA.EMAIL || !exports.config.JIRA.API_TOKEN) {
-    console.warn("WARNING: JIRA_HOST, JIRA_EMAIL, or JIRA_API_TOKEN are missing in .env. Jira calls will fail.");
+    console.warn("WARNING: JIRA credentials missing. Checked JIRA_HOST/JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN, and JIRA_AUTH.");
 }

@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateIssue = exports.createIssue = exports.searchIssues = exports.getIssue = void 0;
+exports.getProjectRoles = exports.getProjectDetails = exports.getBoards = exports.getProjects = exports.updateIssue = exports.createIssue = exports.searchIssues = exports.getIssue = void 0;
 const JiraService = __importStar(require("../services/jira"));
 const getIssue = async (req, res) => {
     try {
@@ -84,3 +84,45 @@ const updateIssue = async (req, res) => {
     }
 };
 exports.updateIssue = updateIssue;
+const getProjects = async (req, res) => {
+    try {
+        const projects = await JiraService.getProjects();
+        res.json(projects);
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message || 'Failed to fetch projects' });
+    }
+};
+exports.getProjects = getProjects;
+const getBoards = async (req, res) => {
+    try {
+        const boards = await JiraService.getBoards();
+        res.json(boards);
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message || 'Failed to fetch boards' });
+    }
+};
+exports.getBoards = getBoards;
+const getProjectDetails = async (req, res) => {
+    try {
+        const { key } = req.params;
+        const project = await JiraService.getProjectDetails(key);
+        res.json(project);
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message || 'Failed to fetch project details' });
+    }
+};
+exports.getProjectDetails = getProjectDetails;
+const getProjectRoles = async (req, res) => {
+    try {
+        const { key } = req.params;
+        const roles = await JiraService.getProjectRoles(key);
+        res.json(roles);
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message || 'Failed to fetch project roles' });
+    }
+};
+exports.getProjectRoles = getProjectRoles;

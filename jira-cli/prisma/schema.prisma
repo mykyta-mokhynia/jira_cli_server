@@ -1,0 +1,23 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Watcher {
+  id          Int      @id @default(autoincrement())
+  issueKey    String
+  projectKey  String
+  accountId   String
+  createdAt   DateTime @default(now())
+
+  // Ensure unique combination of issue and user to prevent duplicates per issue
+  @@unique([issueKey, accountId])
+  // Index for faster lookups when checking if a user watches *any* issue in a project
+  @@index([projectKey, accountId])
+}

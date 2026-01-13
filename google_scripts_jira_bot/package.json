@@ -1,0 +1,13 @@
+{
+    "name": "google-scripts-jira-bot",
+    "version": "1.0.0",
+    "description": "Jira Automation Bot (GAS)",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "devDependencies": {
+        "@types/google-apps-script": "^1.0.78",
+        "typescript": "^5.3.3"
+    }
+}

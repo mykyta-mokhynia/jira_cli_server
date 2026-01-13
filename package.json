@@ -1,0 +1,21 @@
+{
+  "name": "jira",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:back": "cd jira-cli && npm run dev",
+    "dev:front": "cd jira-client && npm run start",
+    "dev": "concurrently \"npm:dev:back\" \"npm:dev:front\" --names \"back,front\" --prefix-colors \"blue,magenta\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

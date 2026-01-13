@@ -1,0 +1,29 @@
+# Environment variables
+.env
+
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+#Personal use
+jira-client/

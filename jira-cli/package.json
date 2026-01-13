@@ -1,0 +1,28 @@
+{
+    "name": "jira-bot-cli",
+    "version": "1.0.0",
+    "description": "CLI to control Jira Google Apps Script Bot",
+    "main": "index.ts",
+    "scripts": {
+        "start": "ts-node src/server.ts",
+        "dev": "nodemon src/server.ts",
+        "build": "tsc"
+    },
+    "dependencies": {
+        "axios": "^1.6.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.0",
+        "express": "^5.2.1",
+        "jira.js": "^5.2.2",
+        "yargs": "^17.7.0"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.6",
+        "@types/node": "^20.0.0",
+        "@types/yargs": "^17.0.0",
+        "nodemon": "^3.1.11",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.3.0"
+    }
+}

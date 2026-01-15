@@ -48,10 +48,6 @@ router.get('/boards', JiraController.getBoards);
 router.get('/project/:key', JiraController.getProjectDetails);
 router.get('/project/:key/roles', JiraController.getProjectRoles);
 const TemplateController = __importStar(require("../controllers/templateController"));
-const WebhookController = __importStar(require("../controllers/webhookController"));
 router.get('/project/:key/audit', TemplateController.auditProject);
 router.post('/project/:key/apply-template', TemplateController.applyProjectTemplate);
-const authMiddleware_1 = require("../middlewares/authMiddleware");
-// Protect webhook route: Allow JIRA or GAS (legacy) sources
-router.post('/webhook', (0, authMiddleware_1.verifySource)(['JIRA', 'GAS']), WebhookController.handleIssueWebhook);
 exports.default = router;

@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -19,5 +20,18 @@ model Watcher {
   // Ensure unique combination of issue and user to prevent duplicates per issue
   @@unique([issueKey, accountId])
   // Index for faster lookups when checking if a user watches *any* issue in a project
+  @@index([projectKey, accountId])
+}
+
+model Assignee {
+  id          Int      @id @default(autoincrement())
+  issueKey    String
+  projectKey  String
+  accountId   String
+  createdAt   DateTime @default(now())
+
+  // Ensure unique combination of issue and user to prevent duplicates per issue
+  @@unique([issueKey, accountId])
+  // Index for faster lookups when checking if a user has *any* assigned issues in a project
   @@index([projectKey, accountId])
 }

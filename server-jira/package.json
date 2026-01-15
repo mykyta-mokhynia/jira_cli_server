@@ -1,8 +1,8 @@
 {
-    "name": "jira-bot-cli",
+    "name": "server-jira",
     "version": "1.0.0",
-    "description": "CLI to control Jira Google Apps Script Bot",
-    "main": "index.ts",
+    "description": "Jira Server for Watcher Automation",
+    "main": "src/server.ts",
     "scripts": {
         "start": "ts-node src/server.ts",
         "dev": "nodemon src/server.ts",
@@ -16,15 +16,13 @@
         "dotenv": "^16.3.0",
         "express": "^5.2.1",
         "jira.js": "^5.2.2",
-        "pg": "^8.16.3",
-        "yargs": "^17.7.0"
+        "pg": "^8.16.3"
     },
     "devDependencies": {
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
         "@types/node": "^20.0.0",
         "@types/pg": "^8.16.0",
-        "@types/yargs": "^17.0.0",
         "nodemon": "^3.1.11",
         "prisma": "^7.2.0",
         "ts-node": "^10.9.1",

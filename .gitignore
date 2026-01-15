@@ -27,5 +27,6 @@ temp/
 
 #Personal use
 jira-client/
+jira-cli/
 docs/
 google_scripts_jira_bot

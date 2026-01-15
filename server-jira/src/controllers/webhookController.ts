@@ -1,26 +1,24 @@
 import { Request, Response } from 'express';
 import * as WatcherService from '../services/watcherService';
+import * as AssigneeService from '../services/assigneeService';
+import * as JiraService from '../services/jira';
 
-const WATCHERS_FIELD_ID = "customfield_10170"; // Change if needed based on user config
+const WATCHERS_FIELD_ID = process.env.WATCHERS_FIELD_ID || "customfield_10170";
 
 export const handleIssueWebhook = async (req: Request, res: Response) => {
     try {
         const data = req.body;
         const issue = data.issue;
         const eventType = data.issue_event_type_name;
-        // We use full details from 'issue', not just changelog, to get *current* state.
-        // Webhook usually sends the full issue object with current field values.
 
         if (!issue || !issue.fields || !issue.key) {
-            console.log('Ignored webhook: No issue data');
-            res.status(200).send('Ignored');
+            res.status(200).send('Ignored: No issue data');
             return;
         }
 
         const projectKey = issue.fields.project.key;
-
-        // Filter events we care about
         const interestedEvents = ['issue_created', 'issue_updated', 'issue_generic'];
+
         if (!interestedEvents.includes(eventType)) {
             res.status(200).send('Ignored event type');
             return;
@@ -28,7 +26,7 @@ export const handleIssueWebhook = async (req: Request, res: Response) => {
 
         console.log(`[Webhook] Processing ${eventType} for ${issue.key}`);
 
-        // Get CURRENT watchers from the issue payload
+        // 1. Sync Watchers
         const fieldVal = issue.fields[WATCHERS_FIELD_ID];
         const currentWatcherAccountIds = new Set<string>();
 
@@ -38,8 +36,13 @@ export const handleIssueWebhook = async (req: Request, res: Response) => {
             });
         }
 
-        // Delegate to Service to diff with DB and sync
         await WatcherService.syncWatchers(projectKey, issue.key, currentWatcherAccountIds);
+
+        // 2. Sync Assignee (Full sync with DB tracking)
+        const assignee = issue.fields.assignee;
+        const currentAssigneeAccountId = assignee?.accountId || null;
+
+        await AssigneeService.syncAssignee(projectKey, issue.key, currentAssigneeAccountId);
 
         res.status(200).send('Processed');
 

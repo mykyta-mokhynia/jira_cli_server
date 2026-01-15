@@ -161,7 +161,6 @@ export const applyProjectTemplate = async (projectKey: string, projectType: stri
         `${projectKey}group_admin`,
         `${projectKey}group_executor`,
         `${projectKey}group_user`,
-        `${projectKey}group_user`,
         `${projectKey}group_watchers`,
         'audit',
         'org-admins'
@@ -190,23 +189,9 @@ export const applyProjectTemplate = async (projectKey: string, projectType: stri
         }
     }
 
-    // 1.1 Assign Groups to Project Roles
     const roleMapping: { [group: string]: string } = {
-        [`${projectKey}group`]: 'Service Desk Team', // or "Service Desk Team"
+        [`${projectKey}group`]: 'Service Desk Team',
         [`${projectKey}group_admin`]: 'Administrators',
-        [`${projectKey}group_executor`]: 'Executors', // Assuming role name "Executors" exists? Or "Service Desk Team"? User said "Executor" -> Executor role?
-        // Wait, standard Jira roles are usually: Administrators, Service Desk Team, Service Desk Customers.
-        // User said: {KEY}group_executor -> Executor. I assume role "Executor" should be used.
-        // Verify default roles? Let's try to find best match or just log warning.
-        // User mapping from prompt:
-        // {KEY}group               → Service Desk Team
-        // {KEY}group_admin         → Administrators
-        // {KEY}group_executor      → Executor (Might be custom role)
-        // {KEY}group_user          → User (Might be "Users" or "Service Desk Customers"?)
-        // {KEY}group_watchers      → Watchers (Might be custom)
-        // Audit                    → Viewer (Might be custom)
-        // org-admins               → Administrator (Administrators)
-
         [`${projectKey}group_executor`]: 'Executor',
         [`${projectKey}group_user`]: 'User',
         [`${projectKey}group_watchers`]: 'Watchers',
@@ -310,22 +295,17 @@ const migrateUsersAndCleanup = async (jira: Version3Client, projectKey: string, 
     const visitedRoles = new Set<string>();
 
     // Role Hierarchy (Lower number = Higher priority)
+    // Only Service Desk Team and User/Service Desk Customers undergo user migration.
     const ROLE_PRIORITY: { [roleName: string]: number } = {
-        'Administrators': 1,
-        'Service Desk Team': 2,
-        'User': 3,
-        'Service Desk Customers': 3,
-        'Viewer': 4,
-        'Executor': 2,
-        'Watchers': 4
+        'Service Desk Team': 1,
+        'User': 2,
+        'Service Desk Customers': 2
     };
 
     // Target Groups for each priority
     const PRIORITY_TARGET_GROUP: { [priority: number]: string } = {
-        1: `${projectKey}group_admin`,
-        2: `${projectKey}group`,
-        3: `${projectKey}group_user`,
-        4: 'audit'
+        1: `${projectKey}group`,
+        2: `${projectKey}group_user`
     };
 
     // 1. Scan Roles
